@@ -11,13 +11,11 @@ const init = async () => {
 
     const address = await web3.eth.getAccounts()
 
-    await contract.methods.mint("black coffee").send({from: address[1], gas: 700000})
-    const result = await contract.methods.getCofName(0).call()
-    const owner = await contract.methods.ownerOf(0).call()
-    console.log(result)
+    await contract.methods.mint(address[1], 03).send({from: address[1], gas: 700000})
+    const owner = await contract.methods.ownerOf(01).call()
     console.log("owner:",owner)
 
-    await contract.methods.safeTransferFrom(address[1],address[0],0).send({from: address[1], gas: 700000})
+    await contract.methods.safeTransferFrom(address[1],address[2],03).send({from: address[1], gas: 700000})
 
     const results = await contract.getPastEvents(
         'Transfer',
