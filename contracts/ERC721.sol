@@ -1,7 +1,7 @@
 pragma solidity ^0.6.0;
 
-import '../interfaces/IERC721.sol';
-import '../interfaces/IERC721TokenReceiver.sol';
+import './interfaces/IERC721.sol';
+import './interfaces/IERC721Receiver.sol';
 
 contract ERC721 is IERC721, IERC721Receiver{
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
@@ -57,11 +57,11 @@ contract ERC721 is IERC721, IERC721Receiver{
         operator = _approved[tokenId]; 
     }
 
-    function setApprovalForAll(address operator, bool _approved) external override{
+    function setApprovalForAll(address operator, bool approved) external override{
         require(operator != address(0));
         require(operator != msg.sender);
-        _approvedAll[msg.sender][operator] = _approved;
-        emit ApprovalForAll(msg.sender, operator, _approved);
+        _approvedAll[msg.sender][operator] = approved;
+        emit ApprovalForAll(msg.sender, operator, approved);
     }
 
     function isApprovedForAll(address owner, address operator) external override view returns (bool){
@@ -100,7 +100,7 @@ contract ERC721 is IERC721, IERC721Receiver{
         return (retval == _ERC721Received);
     }
 
-    function isContract(address addr) internal returns (bool) {
+    function isContract(address addr) internal view returns (bool) {
         uint size;
         assembly{ size := extcodesize(addr)}
         return size > 0;
