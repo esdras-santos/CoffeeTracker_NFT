@@ -1,21 +1,22 @@
 const MOY = artifacts.require("MOY")
 
-var assert = require("assert");
+contract("MOY", (accounts) =>{
+    let moy = null
+    before(async ()=>{
+        moy = await MOY.deployed()
+    })
 
-contract('MOY',function(accounts){
-    var tokenInstance;
-
-    it('make transfer',async function(){
-        tokenInstance = await MOY.deployed()
-        fromAccount = accounts[1]
-        toAccount = accounts[2]
-        spendingAccount = accounts[3]
-
-        
-        
-        await tokenInstance.mint("black coffe",fromAccount)
-        return tokenInstance.safeTransferFrom(fromAccount, toAccount, 0, {from: toAccount}).then(assert.fail).catch(function(error){
-            assert(error.message.indexOf("revert") >= 0, "erro caralho")
-        })
-    })  
+    it('Should show the correct balance and owner', async ()=>{
+        await moy.mint(10,{from: accounts[0]})
+        const balance = await moy.balanceOf(accounts[0])
+        assert(balance.toNumber() === 1)
+        const owner = await moy.ownerOf(10)
+        try{
+            const owner = await moy.ownerOf(20)
+            assert.equal(owner, accounts[1])        
+        }catch(e){
+            assert(e.message.indexOf("revert") >= 0, "wrong owner")
+        }
+        assert.equal(owner, accounts[0])
+    })
 })
